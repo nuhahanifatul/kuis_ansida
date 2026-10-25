@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kuis IB Komputer HP - Kelas 7</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Prevent text selection */
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-center items-center p-4">
+
+  <!-- Alert Pelanggaran Tab -->
+  <div id="violation-modal" class="hidden fixed inset-0 bg-red-900 bg-opacity-90 z-50 flex flex-col justify-center items-center p-6 text-center text-white">
+    <h1 class="text-3xl font-bold mb-2">⚠️ PERINGATAN!</h1>
+    <p class="text-lg mb-4">Anda terdeteksi keluar dari aplikasi/tab kuis!</p>
+    <p id="violation-count" class="text-xl font-semibold mb-6">Pelanggaran: 0 / 3</p>
+    <button onclick="closeViolationModal()" class="bg-white text-red-600 font-bold px-6 py-2 rounded-lg shadow-lg hover:bg-slate-100">Lanjutkan Kuis</button>
+  </div>
+
+  <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+    
+    <!-- Header -->
+    <div class="bg-blue-600 p-6 text-white text-center">
+      <h1 class="text-2xl font-bold">Kuis IB Komputer Kelas 7</h1>
+      <p class="text-blue-100 text-sm mt-1">Materi: Google Docs Mobile (HP)</p>
+    </div>
+
+    <div class="p-6">
+      
+      <!-- Screen 1: Form Identitas -->
+      <div id="screen-start">
+        <h2 class="text-xl font-semibold mb-4 text-slate-700">Isi Data Diri</h2>
+        <form id="form-identity" onsubmit="startQuiz(event)">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Nama Lengkap</label>
+            <input type="text" id="input-nama" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan nama lengkap">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Kelas</label>
+            <select id="input-kelas" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <option value="">-- Pilih Kelas --</option>
+              <option value="7M">7M</option>
+              <option value="7N">7N</option>
+              <option value="7O">7O</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-slate-600 mb-1">No. Absen</label>
+            <input type="number" id="input-absen" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan no absen">
+          </div>
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg mb-6 text-xs text-amber-800">
+            📌 <strong>Perhatian:</strong> Dilarang berpindah tab, meminimalkan aplikasi, atau membuka Google selama kuis berlangsung!
+          </div>
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">Mulai Kuis Sekarang</button>
+        </form>
+      </div>
+
+      <!-- Screen 2: Soal Kuis -->
+      <div id="screen-quiz" class="hidden">
+        <div class="flex justify-between items-center mb-4 border-b pb-2">
+          <span id="question-number" class="text-sm font-semibold text-blue-600">Soal 1 dari 10</span>
+        </div>
+        
+        <h3 id="question-text" class="text-lg font-medium text-slate-800 mb-6">Pertanyaan...</h3>
+        
+        <div id="options-container" class="space-y-3 mb-6">
+          <!-- Pilihan Jawaban akan disisipkan via JS -->
+        </div>
+
+        <button id="btn-next" onclick="nextQuestion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200" disabled>Lanjut</button>
+      </div>
+
+      <!-- Screen 3: Hasil & Pembahasan -->
+      <div id="screen-result" class="hidden">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-slate-800">Kuis Selesai!</h2>
+          <p id="user-info" class="text-slate-500 text-sm mt-1"></p>
+          <div class="my-4 inline-block bg-blue-50 border border-blue-200 rounded-full px-6 py-3">
+            <span class="text-sm text-slate-600 block">Nilai Anda:</span>
+            <span id="final-score" class="text-4xl font-extrabold text-blue-600">0</span>
+          </div>
+          <p id="sending-status" class="text-xs text-slate-400">Mengirim nilai ke Google Sheets...</p>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-700 mb-3 border-b pb-1">Pembahasan Soal</h3>
+        <div id="review-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+          <!-- Pembahasan akan di-render di sini -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // URL Google Apps Script Anda
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcw6RRkAFtufqyBllTPsr79_GdQcEXRvQoptr8OvCiSnUYLrxSYa0q4xeUznCcxmTw/exec";
+
+    // Bank Soal Materi Google Docs HP (Kelas 7 IB Komputer)
+    const questions = [
+      {
+        q: "Untuk menebalkan teks tulisan di Google Docs HP, icon/tombol apa yang digunakan?",
+        options: ["Icon <b>B</b> (Bold)", "Icon <i>I</i> (Italic)", "Icon <u>U</u> (Underline)", "Icon A (Warna Teks)"],
+        answer: 0,
+        desc: "Bold (tombol B) digunakan untuk mempertebal teks."
+      },
+      {
+        q: "Jika kita ingin membuat teks miring pada teks yang dipilih, fitur yang digunakan adalah...",
+        options: ["Underline", "Bold", "Italic", "Strikethrough"],
+        answer: 2,
+        desc: "Italic (tombol I miring) berfungsi memberi efek cetak miring."
+      },
+      {
+        q: "Bagaimana cara memberi garis bawah pada judul dokumen di Google Docs HP?",
+        options: ["Menekan tombol B", "Menekan tombol U", "Menekan tombol I", "Mengubah Ukuran Font"],
+        answer: 1,
+        desc: "Underline (tombol U) memberi garis bawah pada kata/kalimat yang di-blok."
+      },
+      {
+        q: "Ikon berbentuk daftar nomor (1, 2, 3...) di toolbar Google Docs HP digunakan untuk...",
+        options: ["Bullets", "Numbering", "Alignment", "Line Spacing"],
+        answer: 1,
+        desc: "Numbering digunakan untuk membuat daftar berurutan angka."
+      },
+      {
+        q: "Untuk membuat daftar poin berbentuk simbol/titik-titik hitam, kita menggunakan fitur...",
+        options: ["Numbering", "Merge Cells", "Bullets", "Justify"],
+        answer: 2,
+        desc: "Bullets digunakan untuk daftar rincian menggunakan simbol titik/simbol lainnya."
+      },
+      {
+        q: "Format perataan paragraf yang membuat teks rapi rata di sisi kiri dan kanan adalah...",
+        options: ["Rata Kiri (Left)", "Rata Tengah (Center)", "Rata Kanan (Right)", "Rata Kiri Kanan (Justify)"],
+        answer: 3,
+        desc: "Justify meratakan teks di kedua sisi (kiri dan kanan)."
+      },
+      {
+        q: "Untuk menambahkan gambar/foto dari galeri HP ke dokumen Google Docs, tombol pertama yang di-tap adalah...",
+        options: ["Tombol pensil (Edit)", "Tombol tambah (+)", "Tombol titik tiga (...)", "Tombol bagikan"],
+        answer: 1,
+        desc: "Menu Sisipkan (tombol +) digunakan untuk memasukkan Foto, Tabel, dan Link."
+      },
+      {
+        q: "Fungsi dari fitur 'Merge Cells' (Gabungkan Sel) saat membuat tabel di Google Docs HP adalah...",
+        options: ["Menghapus tabel", "Menggabungkan dua atau lebih kotak/sel menjadi satu", "Mewarnai sel", "Menambah baris baru"],
+        answer: 1,
+        desc: "Merge Cells menyatukan beberapa sel terpisah menjadi satu sel yang lebih besar."
+      },
+      {
+        q: "Ketika menyisipkan Tabel di Google Docs HP, dua pengaturan dasar yang harus ditentukan pertama kali adalah...",
+        options: ["Warna dan Gambar", "Baris (Rows) dan Kolom (Columns)", "Font dan Ukuran", "Judul dan Margin"],
+        answer: 1,
+        desc: "Tabel dibentuk berdasarkan kombinasi Baris (horizontal) dan Kolom (vertikal)."
+      },
+      {
+        q: "Jika Anda ingin meletakkan Judul di posisi tepat pertengahan layar HP, perataan paragraf apa yang dipakai?",
+        options: ["Align Left", "Center", "Align Right", "Justify"],
+        answer: 1,
+        desc: "Center (Rata Tengah) memosisikan kalimat di tengah-tengah halaman."
+      }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let userAnswers = [];
+    let userData = {};
+    let violations = 0;
+    let selectedOption = null;
+
+    // Keamanan Anti-Contek (Deteksi Pindah Tab / Pindah Aplikasi)
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden && document.getElementById("screen-quiz").classList.contains("hidden") === false) {
+        violations++;
+        document.getElementById("violation-count").innerText = `Pelanggaran: ${violations} / 3`;
+        document.getElementById("violation-modal").classList.remove("hidden");
+        
+        if (violations >= 3) {
+          alert("Anda mendapatkan 3 kali peringatan! Kuis akan otomatis dikirim.");
+          finishQuiz();
+        }
+      }
+    });
+
+    function closeViolationModal() {
+      document.getElementById("violation-modal").classList.add("hidden");
+    }
+
+    function startQuiz(e) {
+      e.preventDefault();
+      userData = {
+        nama: document.getElementById("input-nama").value,
+        kelas: document.getElementById("input-kelas").value,
+        noAbsen: document.getElementById("input-absen").value
+      };
+
+      document.getElementById("screen-start").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.remove("hidden");
+      
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      selectedOption = null;
+      const qData = questions[currentIdx];
+      
+      document.getElementById("question-number").innerText = `Soal ${currentIdx + 1} dari ${questions.length}`;
+      document.getElementById("question-text").innerText = qData.q;
+      
+      const btnNext = document.getElementById("btn-next");
+      btnNext.disabled = true;
+      btnNext.classList.add("opacity-50", "cursor-not-allowed");
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-blue-400 transition flex items-center bg-slate-50";
+        btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold mr-3 text-sm">${String.fromCharCode(65 + idx)}</span> <span class="text-slate-700 font-medium">${opt}</span>`;
+        btn.onclick = () => selectOption(idx, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(idx, element) {
+      selectedOption = idx;
+      const allBtns = document.getElementById("options-container").children;
+      for (let btn of allBtns) {
+        btn.classList.remove("border-blue-600", "bg-blue-50");
+        btn.classList.add("border-slate-200", "bg-slate-50");
+      }
+      element.classList.remove("border-slate-200", "bg-slate-50");
+      element.classList.add("border-blue-600", "bg-blue-50");
+
+      const btnNext = document.getElementById("btn-next");
+      btnNext.disabled = false;
+      btnNext.classList.remove("opacity-50", "cursor-not-allowed");
+    }
+
+    function nextQuestion() {
+      if (selectedOption === null) return;
+      
+      userAnswers.push(selectedOption);
+      if (selectedOption === questions[currentIdx].answer) {
+        score += 10;
+      }
+
+      currentIdx++;
+      if (currentIdx < questions.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-result").classList.remove("hidden");
+
+      document.getElementById("user-info").innerText = `${userData.nama} | Kelas: ${userData.kelas} | No: ${userData.noAbsen}`;
+      document.getElementById("final-score").innerText = score;
+
+      sendDataToSheet();
+      renderReview();
+    }
+
+    function sendDataToSheet() {
+      const payload = {
+        nama: userData.nama,
+        kelas: userData.kelas,
+        noAbsen: userData.noAbsen,
+        nilai: score
+      };
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        document.getElementById("sending-status").innerText = "✅ Nilai berhasil dikirim ke Google Sheets!";
+        document.getElementById("sending-status").classList.add("text-green-600");
+      })
+      .catch((err) => {
+        document.getElementById("sending-status").innerText = "⚠️ Gagal mengirim nilai otomatis.";
+        document.getElementById("sending-status").classList.add("text-red-500");
+      });
+    }
+
+    function renderReview() {
+      const reviewContainer = document.getElementById("review-container");
+      reviewContainer.innerHTML = "";
+
+      questions.forEach((q, idx) => {
+        const userAns = userAnswers[idx];
+        const isCorrect = userAns === q.answer;
+
+        const card = document.createElement("div");
+        card.className = `p-4 rounded-xl border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`;
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span class="font-bold text-sm text-slate-700">Soal ${idx + 1}</span>
+            <span class="text-xs px-2 py-1 rounded font-bold ${isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">
+              ${isCorrect ? 'BENAR' : 'SALAH'}
+            </span>
+          </div>
+          <p class="text-slate-800 text-sm my-2">${q.q}</p>
+          <div class="text-xs space-y-1">
+            <p><span class="font-semibold text-slate-600">Jawaban Kamu:</span> ${userAns !== undefined ? q.options[userAns] : 'Tidak dijawab'}</p>
+            ${!isCorrect ? `<p><span class="font-semibold text-green-700">Jawaban Benar:</span> ${q.options[q.answer]}</p>` : ''}
+            <p class="text-slate-500 italic mt-1 font-sans">💡 <strong>Pembahasan:</strong> ${q.desc}</p>
+          </div>
+        `;
+        reviewContainer.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
