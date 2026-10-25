@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Game Menulis Rumus IF & IFS - Kelas 9</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-emerald-50 text-slate-800 font-sans min-h-screen flex flex-col justify-center items-center p-4">
+
+  <!-- Alert Pelanggaran Tab -->
+  <div id="violation-modal" class="hidden fixed inset-0 bg-red-900 bg-opacity-90 z-50 flex flex-col justify-center items-center p-6 text-center text-white">
+    <h1 class="text-3xl font-bold mb-2">⚠️ PERINGATAN!</h1>
+    <p class="text-lg mb-4">Anda terdeteksi keluar dari aplikasi/tab kuis!</p>
+    <p id="violation-count" class="text-xl font-semibold mb-6">Pelanggaran: 0 / 3</p>
+    <button onclick="closeViolationModal()" class="bg-white text-red-600 font-bold px-6 py-2 rounded-lg shadow-lg hover:bg-slate-100">Lanjutkan Kuis</button>
+  </div>
+
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-100">
+    
+    <div class="p-6">
+      
+      <!-- Screen 1: Form Identitas -->
+      <div id="screen-start">
+        <h2 class="text-2xl font-bold mb-2 text-emerald-700 text-center">Game Menulis Rumus</h2>
+        <p class="text-slate-500 text-xs text-center mb-6">Khusus Logika IF (2 Pilihan) & IFS (Banyak Pilihan)</p>
+        
+        <form id="form-identity" onsubmit="startQuiz(event)">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Nama Lengkap</label>
+            <input type="text" id="input-nama" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan nama">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Kelas</label>
+            <select id="input-kelas" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <option value="">-- Pilih Kelas --</option>
+              <!-- Opsi Kelas 9A - 9P -->
+            </select>
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-slate-600 mb-1">No. Absen</label>
+            <input type="number" id="input-absen" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan no absen">
+          </div>
+          
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl mb-6 text-xs text-amber-800">
+            📌 <strong>Ketentuan:</strong> Ketik rumus diawali tanda <strong>=</strong>. Tidak bisa kembali ke soal sebelumnya!
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md">Mulai Game</button>
+        </form>
+      </div>
+
+      <!-- Screen 2: Soal Kuis -->
+      <div id="screen-quiz" class="hidden">
+        
+        <!-- Header Info User -->
+        <div class="flex items-center justify-between mb-4 gap-2">
+          <div class="flex items-center bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 text-xs font-semibold text-emerald-800 flex-1">
+            👤 <span id="display-nama" class="truncate ml-1">Nama</span>
+          </div>
+          <div class="flex items-center bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 text-xs font-semibold text-emerald-800">
+            🔢 Absen <span id="display-absen" class="ml-1">0</span>
+          </div>
+          <div class="flex items-center bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 text-xs font-semibold text-emerald-800">
+            🏫 <span id="display-kelas" class="ml-1">9A</span>
+          </div>
+        </div>
+
+        <!-- Indicator Soal -->
+        <div class="bg-emerald-50 text-emerald-800 text-center py-2 rounded-xl text-sm font-semibold mb-4 border border-emerald-100">
+          <span id="question-number">Soal 1 / 15</span>
+        </div>
+        
+        <!-- Card Soal -->
+        <div class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-200 mb-6">
+          <span id="soal-title" class="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">Soal 1</span>
+          <p id="question-text" class="text-slate-800 font-medium text-sm mb-3 leading-relaxed">
+            Tuliskan rumus...
+          </p>
+          <div id="hint-box" class="flex items-center text-xs text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+            💡 <span id="hint-text" class="ml-1 italic">Petunjuk...</span>
+          </div>
+        </div>
+
+        <!-- Input Form Rumus -->
+        <form onsubmit="submitAnswer(event)">
+          <label class="block text-xs font-bold text-slate-600 mb-2">✍️ Tulis rumusmu di sini:</label>
+          <input 
+            type="text" 
+            id="input-rumus" 
+            required 
+            autocomplete="off" 
+            autocorrect="off" 
+            autocapitalize="none"
+            class="w-full px-4 py-3 border-2 border-emerald-500 rounded-2xl focus:ring-2 focus:ring-emerald-400 focus:outline-none font-mono text-sm mb-4 text-slate-800 bg-slate-50" 
+            placeholder='Contoh: =IF(H3>=20000,"LUNAS","BELUM LUNAS")'
+          >
+
+          <button type="submit" id="btn-submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-2xl transition duration-200 shadow-md flex justify-center items-center gap-2 mb-2">
+            <span>✅ Jawab & Lanjut</span>
+          </button>
+        </form>
+
+      </div>
+
+      <!-- Screen 3: Hasil & Pembahasan -->
+      <div id="screen-result" class="hidden">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-slate-800">Kuis Selesai!</h2>
+          <p id="user-info" class="text-slate-500 text-sm mt-1"></p>
+          <div class="my-4 inline-block bg-emerald-50 border border-emerald-200 rounded-full px-6 py-3">
+            <span class="text-sm text-slate-600 block">Nilai Anda:</span>
+            <span id="final-score" class="text-4xl font-extrabold text-emerald-600">0</span>
+          </div>
+          <p id="sending-status" class="text-xs text-slate-400">Mengirim nilai ke Google Sheets...</p>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-700 mb-3 border-b pb-1">Pembahasan Soal</h3>
+        <div id="review-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+          <!-- Pembahasan -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcw6RRkAFtufqyBllTPsr79_GdQcEXRvQoptr8OvCiSnUYLrxSYa0q4xeUznCcxmTw/exec";
+
+    // Opsi Kelas 9A - 9P
+    const selectKelas = document.getElementById("input-kelas");
+    const classes = ["9A","9B","9C","9D","9E","9F","9G","9H","9I","9J","9K","9L","9M","9N","9O","9P"];
+    classes.forEach(cls => {
+      const opt = document.createElement("option");
+      opt.value = cls;
+      opt.innerText = cls;
+      selectKelas.appendChild(opt);
+    });
+
+    // 15 Soal Khusus IF dan IFS dengan Logika Jelas
+    const masterQuestions = [
+      {
+        q: "[Tabel Kas] Cek Total Iuran di sel H3. Jika nilai di H3 lebih besar dari atau sama dengan 20000 (H3>=20000), maka berikan teks \"LUNAS\". Jika kurang, maka berikan teks \"BELUM LUNAS\".",
+        hint: "Gunakan rumus IF 3 argumen: =IF(tes_logika; \"jika_benar\"; \"jika_salah\")",
+        validAnswers: [
+          '=IF(H3>=20000,"LUNAS","BELUM LUNAS")',
+          '=IF(H3>=20000;"LUNAS";"BELUM LUNAS")'
+        ],
+        desc: "Kunci: =IF(H3>=20000; \"LUNAS\"; \"BELUM LUNAS\")"
+      },
+      {
+        q: "[Tabel Penginapan] Tentukan Kategori Kamar berdasarkan Harga Permalam di sel D2. Syarat: jika D2=500000 hasilkan \"suite\", jika D2=350000 hasilkan \"deluxe\", dan jika D2=200000 hasilkan \"standart\".",
+        hint: "Gunakan rumus IFS untuk 3 syarat berurutan.",
+        validAnswers: [
+          '=IFS(D2=500000,"suite",D2=350000,"deluxe",D2=200000,"standart")',
+          '=IFS(D2=500000;"suite";D2=350000;"deluxe";D2=200000;"standart")'
+        ],
+        desc: "Kunci: =IFS(D2=500000; \"suite\"; D2=350000; \"deluxe\"; D2=200000; \"standart\")"
+      },
+      {
+        q: "[Tabel Kas] Cek Total Iuran siswa di sel H4. Jika nilainya kurang dari 20000 (H4<20000), maka berikan status \"BELUM LUNAS\". Jika tidak, berikan status \"LUNAS\".",
+        hint: "Gunakan tanda panah kurang dari (<)",
+        validAnswers: [
+          '=IF(H4<20000,"BELUM LUNAS","LUNAS")',
+          '=IF(H4<20000;"BELUM LUNAS";"LUNAS")'
+        ],
+        desc: "Kunci: =IF(H4<20000; \"BELUM LUNAS\"; \"LUNAS\")"
+      },
+      {
+        q: "[Tabel Penginapan] Tentukan Kategori Kamar di sel D3. Jika D3 bernilai 500000 maka tampilkan \"suite\", tetapi jika D3 bernilai 350000 maka tampilkan \"deluxe\".",
+        hint: "Gunakan IFS dengan 2 pasangan syarat dan hasil.",
+        validAnswers: [
+          '=IFS(D3=500000,"suite",D3=350000,"deluxe")',
+          '=IFS(D3=500000;"suite";D3=350000;"deluxe")'
+        ],
+        desc: "Kunci: =IFS(D3=500000; \"suite\"; D3=350000; \"deluxe\")"
+      },
+      {
+        q: "[Tabel Kas] Cek sel H5. Jika Total Iuran di H5 sudah mencapai 20000 (H5>=20000), tampilkan teks \"LUNAS\". Jika belum, tampilkan teks \"BELUM LUNAS\".",
+        hint: "Format IF: =IF(H5>=20000; \"LUNAS\"; \"BELUM LUNAS\")",
+        validAnswers: [
+          '=IF(H5>=20000,"LUNAS","BELUM LUNAS")',
+          '=IF(H5>=20000;"LUNAS";"BELUM LUNAS")'
+        ],
+        desc: "Kunci: =IF(H5>=20000; \"LUNAS\"; \"BELUM LUNAS\")"
+      },
+      {
+        q: "[Tabel Penginapan] Tentukan tipe kamar dari harga di sel D4. Syarat: jika D4=350000 maka \"deluxe\", dan jika D4=200000 maka \"standart\".",
+        hint: "Gunakan IFS: pasangan pertama untuk 350000, kedua untuk 200000.",
+        validAnswers: [
+          '=IFS(D4=350000,"deluxe",D4=200000,"standart")',
+          '=IFS(D4=350000;"deluxe";D4=200000;"standart")'
+        ],
+        desc: "Kunci: =IFS(D4=350000; \"deluxe\"; D4=200000; \"standart\")"
+      },
+      {
+        q: "[Tabel Ujian] Cek Nilai Ujian siswa di sel A2. Jika A2 lebih besar dari 75 (A2>75), maka siswa dinyatakan \"Lulus\". Jika tidak (75 ke bawah), maka dinyatakan \"Remedial\".",
+        hint: "Gunakan rumus IF sederhana 3 argumen",
+        validAnswers: [
+          '=IF(A2>75,"Lulus","Remedial")',
+          '=IF(A2>75;"Lulus";"Remedial")'
+        ],
+        desc: "Kunci: =IF(A2>75; \"Lulus\"; \"Remedial\")"
+      },
+      {
+        q: "[Tabel Penginapan] Tentukan kategori dari harga di sel D5. Cek urut dari paling mahal: jika D5=500000 hasilkan \"suite\", jika D5=350000 hasilkan \"deluxe\", jika D5=200000 hasilkan \"standart\".",
+        hint: "IFS dengan 3 kondisi: 500000 -> suite, 350000 -> deluxe, 200000 -> standart",
+        validAnswers: [
+          '=IFS(D5=500000,"suite",D5=350000,"deluxe",D5=200000,"standart")',
+          '=IFS(D5=500000;"suite";D5=350000;"deluxe";D5=200000;"standart")'
+        ],
+        desc: "Kunci: =IFS(D5=500000; \"suite\"; D5=350000; \"deluxe\"; D5=200000; \"standart\")"
+      },
+      {
+        q: "[Tabel Kas] Cek Total Iuran di sel H6. Jika H6 sama dengan 20000 (H6=20000), tampilkan \"LUNAS\". Jika tidak sama, tampilkan \"BELUM LUNAS\".",
+        hint: "Gunakan operator sama dengan (=)",
+        validAnswers: [
+          '=IF(H6=20000,"LUNAS","BELUM LUNAS")',
+          '=IF(H6=20000;"LUNAS";"BELUM LUNAS")'
+        ],
+        desc: "Kunci: =IF(H6=20000; \"LUNAS\"; \"BELUM LUNAS\")"
+      },
+      {
+        q: "[Tabel Nilai Rapor] Tentukan Predikat Nilai di sel B2. Syarat: jika B2>=90 tampilkan \"A\", jika B2>=80 tampilkan \"B\", dan jika B2>=70 tampilkan \"C\".",
+        hint: "Gunakan IFS bertingkat dengan operator >=",
+        validAnswers: [
+          '=IFS(B2>=90,"A",B2>=80,"B",B2>=70,"C")',
+          '=IFS(B2>=90;"A";B2>=80;"B";B2>=70;"C")'
+        ],
+        desc: "Kunci: =IFS(B2>=90; \"A\"; B2>=80; \"B\"; B2>=70; \"C\")"
+      },
+      {
+        q: "[Tabel Kas] Cek sel H7. Jika total uang di H7 kurang dari 20000 (H7<20000), maka berikan keterangan \"KURANG\". Jika tidak kurang, berikan keterangan \"CUKUP\".",
+        hint: "Format IF: =IF(logika; \"jika_benar\"; \"jika_salah\")",
+        validAnswers: [
+          '=IF(H7<20000,"KURANG","CUKUP")',
+          '=IF(H7<20000;"KURANG";"CUKUP")'
+        ],
+        desc: "Kunci: =IF(H7<20000; \"KURANG\"; \"CUKUP\")"
+      },
+      {
+        q: "[Tabel Kas] Tuliskan rumus IF untuk sel H8. Jika H8 lebih besar atau sama dengan 20000 (H8>=20000), maka hasilkan teks \"LUNAS\". Jika salah, hasilkan \"BELUM LUNAS\".",
+        hint: "Gunakan operator >=",
+        validAnswers: [
+          '=IF(H8>=20000,"LUNAS","BELUM LUNAS")',
+          '=IF(H8>=20000;"LUNAS";"BELUM LUNAS")'
+        ],
+        desc: "Kunci: =IF(H8>=20000; \"LUNAS\"; \"BELUM LUNAS\")"
+      },
+      {
+        q: "[Tabel Penginapan] Tentukan Kategori Kamar untuk sel D6. Jika D6 bernilai 200000 tampilkan \"standart\", jika D6 bernilai 500000 tampilkan \"suite\".",
+        hint: "Gunakan IFS dengan 2 syarat",
+        validAnswers: [
+          '=IFS(D6=200000,"standart",D6=500000,"suite")',
+          '=IFS(D6=200000;"standart";D6=500000;"suite")'
+        ],
+        desc: "Kunci: =IFS(D6=200000; \"standart\"; D6=500000; \"suite\")"
+      },
+      {
+        q: "[Tabel Diskon Toko] Cek Total Belanja di sel C2. Jika C2 lebih dari 100000 (C2>100000), berikan teks \"DAPAT DISKON\". Jika tidak, berikan teks \"TIDAK DISKON\".",
+        hint: "Gunakan IF 3 argumen",
+        validAnswers: [
+          '=IF(C2>100000,"DAPAT DISKON","TIDAK DISKON")',
+          '=IF(C2>100000;"DAPAT DISKON";"TIDAK DISKON")'
+        ],
+        desc: "Kunci: =IF(C2>100000; \"DAPAT DISKON\"; \"TIDAK DISKON\")"
+      },
+      {
+        q: "[Tabel Kas] Cek baris terakhir Kas sel H10. Jika H10>=20000 tampilkan \"LUNAS\", jika tidak tampilkan \"BELUM LUNAS\".",
+        hint: "Perhatikan penulisan tanda petik dua pada teks",
+        validAnswers: [
+          '=IF(H10>=20000,"LUNAS","BELUM LUNAS")',
+          '=IF(H10>=20000;"LUNAS";"BELUM LUNAS")'
+        ],
+        desc: "Kunci: =IF(H10>=20000; \"LUNAS\"; \"BELUM LUNAS\")"
+      }
+    ];
+
+    let questions = [];
+    let currentIdx = 0;
+    let score = 0;
+    let userAnswers = [];
+    let userData = {};
+    let violations = 0;
+
+    // Deteksi Keluar Tab
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden && document.getElementById("screen-quiz").classList.contains("hidden") === false) {
+        violations++;
+        document.getElementById("violation-count").innerText = `Pelanggaran: ${violations} / 3`;
+        document.getElementById("violation-modal").classList.remove("hidden");
+        
+        if (violations >= 3) {
+          alert("Anda mendapatkan 3 kali peringatan! Kuis akan otomatis dikirim.");
+          finishQuiz();
+        }
+      }
+    });
+
+    function closeViolationModal() {
+      document.getElementById("violation-modal").classList.add("hidden");
+    }
+
+    function shuffleArray(array) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function normalizeFormula(str) {
+      if (!str) return "";
+      return str
+        .toUpperCase()
+        .replace(/\s+/g, '')
+        .replace(/;/g, ',');
+    }
+
+    function startQuiz(e) {
+      e.preventDefault();
+      userData = {
+        nama: document.getElementById("input-nama").value,
+        kelas: document.getElementById("input-kelas").value,
+        noAbsen: document.getElementById("input-absen").value
+      };
+
+      document.getElementById("display-nama").innerText = userData.nama;
+      document.getElementById("display-kelas").innerText = userData.kelas;
+      document.getElementById("display-absen").innerText = userData.noAbsen;
+
+      questions = shuffleArray(masterQuestions).slice(0, 15);
+
+      document.getElementById("screen-start").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.remove("hidden");
+      
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const qData = questions[currentIdx];
+      
+      document.getElementById("soal-title").innerText = `Soal ${currentIdx + 1}`;
+      document.getElementById("question-number").innerText = `Soal ${currentIdx + 1} / ${questions.length}`;
+      document.getElementById("question-text").innerText = qData.q;
+      
+      const hintBox = document.getElementById("hint-box");
+      if (qData.hint) {
+        document.getElementById("hint-text").innerText = qData.hint;
+        hintBox.classList.remove("hidden");
+      } else {
+        hintBox.classList.add("hidden");
+      }
+
+      const inputRumus = document.getElementById("input-rumus");
+      inputRumus.value = "";
+      inputRumus.focus();
+    }
+
+    function submitAnswer(e) {
+      e.preventDefault();
+      const inputRumus = document.getElementById("input-rumus").value;
+      const qData = questions[currentIdx];
+
+      userAnswers.push(inputRumus);
+
+      const userNormalized = normalizeFormula(inputRumus);
+      const isCorrect = qData.validAnswers.some(ans => normalizeFormula(ans) === userNormalized);
+
+      if (isCorrect) {
+        score += Math.round(100 / 15 * 100) / 100;
+      }
+
+      currentIdx++;
+      if (currentIdx < questions.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      let finalScoreCalculated = Math.min(100, Math.round(score));
+
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-result").classList.remove("hidden");
+
+      document.getElementById("user-info").innerText = `${userData.nama} | Kelas: ${userData.kelas} | No: ${userData.noAbsen}`;
+      document.getElementById("final-score").innerText = finalScoreCalculated;
+
+      sendDataToSheet(finalScoreCalculated);
+      renderReview();
+    }
+
+    function sendDataToSheet(finalScore) {
+      const payload = {
+        nama: userData.nama,
+        kelas: userData.kelas,
+        noAbsen: userData.noAbsen,
+        nilai: finalScore
+      };
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        document.getElementById("sending-status").innerText = "✅ Nilai berhasil dikirim ke Google Sheets!";
+        document.getElementById("sending-status").classList.add("text-emerald-600");
+      })
+      .catch((err) => {
+        document.getElementById("sending-status").innerText = "⚠️ Gagal mengirim nilai otomatis.";
+        document.getElementById("sending-status").classList.add("text-red-500");
+      });
+    }
+
+    function renderReview() {
+      const reviewContainer = document.getElementById("review-container");
+      reviewContainer.innerHTML = "";
+
+      questions.forEach((q, idx) => {
+        const userAns = userAnswers[idx];
+        const userNorm = normalizeFormula(userAns);
+        const isCorrect = q.validAnswers.some(ans => normalizeFormula(ans) === userNorm);
+
+        const card = document.createElement("div");
+        card.className = `p-4 rounded-2xl border ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`;
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span class="font-bold text-sm text-slate-700">Soal ${idx + 1}</span>
+            <span class="text-xs px-2.5 py-1 rounded-full font-bold ${isCorrect ? 'bg-emerald-200 text-emerald-800' : 'bg-red-200 text-red-800'}">
+              ${isCorrect ? 'BENAR' : 'SALAH'}
+            </span>
+          </div>
+          <p class="text-slate-800 text-sm my-2 font-medium">${q.q}</p>
+          <div class="text-xs space-y-1">
+            <p><span class="font-semibold text-slate-600">Rumus Kamu:</span> <code class="bg-white px-1.5 py-0.5 rounded border font-mono text-slate-800">${userAns ? userAns : '(Kosong)'}</code></p>
+            ${!isCorrect ? `<p><span class="font-semibold text-emerald-700">Kunci Rumus:</span> <code class="bg-emerald-100 px-1.5 py-0.5 rounded font-mono text-emerald-900">${q.validAnswers[0]}</code></p>` : ''}
+            <p class="text-slate-600 italic mt-1.5 font-sans">💡 <strong>Pembahasan:</strong> ${q.desc}</p>
+          </div>
+        `;
+        reviewContainer.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
