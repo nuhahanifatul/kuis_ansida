@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123c7a">
+<title>Misi Data — Informatika Kelas IX</title>
+<style>
+:root{--navy:#123c7a;--blue:#2563eb;--cyan:#22d3ee;--ink:#17233d;--muted:#667085;--bg:#f3f7ff;--card:#fff;--line:#dbe5f5;--green:#16845b;--red:#c0392b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at top right,#dff8ff 0,transparent 30%),var(--bg);color:var(--ink);min-height:100vh}
+header{background:linear-gradient(115deg,#102b59,#1d4ed8 65%,#0891b2);color:white;padding:20px 16px 28px}
+.top{max-width:900px;margin:auto;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.brand{font-weight:900;letter-spacing:.08em;font-size:.8rem;opacity:.9}.pill{border:1px solid #ffffff55;background:#ffffff18;border-radius:99px;padding:7px 11px;font-size:.8rem}
+.hero{max-width:900px;margin:22px auto 0}.hero h1{font-size:clamp(2rem,6vw,3.3rem);line-height:1.02;margin:0 0 10px}.hero p{max-width:640px;margin:0;color:#e5f2ff;line-height:1.55}
+main{max-width:900px;margin:-12px auto 36px;padding:0 14px;position:relative}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 14px 35px #183c7510;margin-bottom:16px}
+h2{margin:0 0 8px;font-size:1.35rem}p.sub{margin:0 0 20px;color:var(--muted);line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-weight:750;font-size:.92rem}input,select{width:100%;padding:13px 14px;border:1px solid #cbd5e1;border-radius:12px;font:inherit;background:white;color:var(--ink)}input:focus,select:focus{outline:3px solid #93c5fd80;border-color:var(--blue)}
+.btn{border:0;border-radius:13px;padding:13px 18px;font:inherit;font-weight:800;cursor:pointer;transition:transform .12s,opacity .12s}.btn:active{transform:scale(.98)}.primary{background:linear-gradient(100deg,#2563eb,#0891b2);color:white}.secondary{background:#eaf1ff;color:#1d4ed8}.btn:disabled{opacity:.4;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{font-size:.87rem;line-height:1.55;color:var(--muted)}.notice{padding:13px 15px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:13px;color:#1e40af;line-height:1.5;font-size:.9rem}.warning{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+.hidden{display:none!important}.stats{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:18px}.timer{font-variant-numeric:tabular-nums;background:#0f172a;color:white;border-radius:13px;padding:10px 13px;font-weight:900;font-size:1.08rem;white-space:nowrap}.timer.danger{background:#b91c1c}.progress-wrap{height:8px;background:#e8eef9;border-radius:99px;overflow:hidden;margin:12px 0 22px}.progress{height:100%;width:0;background:linear-gradient(90deg,#2563eb,#06b6d4);transition:width .2s}
+.kicker{font-size:.8rem;font-weight:900;letter-spacing:.08em;color:#2563eb;text-transform:uppercase}.question{font-size:clamp(1.12rem,3.5vw,1.45rem);line-height:1.45;font-weight:800;margin:12px 0 18px}.options{display:grid;gap:10px}.option{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;cursor:pointer;line-height:1.45;background:white}.option:has(input:checked){border-color:#2563eb;background:#eff6ff;box-shadow:0 0 0 2px #2563eb15}.option input{width:18px;height:18px;margin:2px 0 0;flex:0 0 auto;accent-color:#2563eb}.qfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}.small{font-size:.85rem;color:var(--muted)}.result-score{font-size:clamp(3rem,12vw,5rem);font-weight:950;letter-spacing:-.06em;color:#1d4ed8;line-height:1}.review{border:1px solid var(--line);border-radius:15px;padding:15px;margin-top:12px}.review.correct{border-left:5px solid #16a34a}.review.wrong{border-left:5px solid #dc2626}.review h3{font-size:1rem;margin:0 0 8px}.review p{margin:6px 0;line-height:1.5}.status{font-weight:800}.footer{text-align:center;color:#667085;font-size:.8rem;padding:12px 15px 26px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{align-items:flex-start}.pill{font-size:.72rem}.qfoot .btn{flex:1}.card{border-radius:18px}.stats{grid-template-columns:1fr auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><div class="brand">INFORMATIKA • KELAS IX</div><div class="pill">MISI DATA 🚀</div></div>
+  <div class="hero"><h1>Jadi Detektif Data.</h1><p>Uji kemampuanmu membaca data, menggunakan fungsi spreadsheet, dan memilih grafik yang tepat. Fokus, teliti, dan selesaikan tantangannya!</p></div>
+</header>
+<main>
+<section class="card" id="identity">
+  <h2>Siapkan identitasmu</h2><p class="sub">Pastikan data benar sebelum memulai. Waktu pengerjaan 40 menit dan jawaban yang sudah dikunci tidak dapat diubah.</p>
+  <div class="grid">
+    <div class="field full"><label for="studentName">Nama lengkap</label><input id="studentName" autocomplete="name" maxlength="80" placeholder="Tulis nama lengkap" required></div>
+    <div class="field"><label for="studentNo">Nomor absen</label><input id="studentNo" inputmode="numeric" type="number" min="1" max="60" placeholder="Contoh: 12" required></div>
+    <div class="field"><label for="studentClass">Kelas</label><select id="studentClass" required><option value="">Pilih kelas</option><option>IX A</option><option>IX B</option><option>IX C</option><option>IX D</option><option>IX E</option><option>IX F</option><option>IX G</option><option>IX H</option><option>IX I</option><option>IX J</option></select></div>
+  </div>
+  <div class="notice" style="margin-top:18px"><b>Aturan tantangan</b><br>• Ada 30 soal pilihan ganda, masing-masing bernilai sama.<br>• Waktu total 40 menit. Soal berjalan satu arah, tanpa tombol kembali.<br>• Berpindah tab/aplikasi yang membuat halaman tidak aktif akan tercatat dan memunculkan peringatan. Situs tidak dapat memblokir aplikasi lain di HP.<br>• Pastikan koneksi internet aktif saat mengirim hasil.</div>
+  <div class="actions"><button class="btn primary" id="startBtn">Mulai tantangan →</button></div>
+  <p class="note" id="resumeNote"></p>
+</section>
+
+<section class="card hidden" id="quiz">
+  <div class="stats"><div><div class="kicker" id="questionCount">SOAL 1 DARI 30</div><div class="progress-wrap"><div class="progress" id="progress"></div></div></div><div class="timer" id="timer">40:00</div></div>
+  <div class="small" id="topicLabel">Topik</div>
+  <div class="question" id="questionText"></div>
+  <div class="options" id="options"></div>
+  <div class="qfoot"><span class="small" id="answeredLabel">Jawaban belum dipilih</span><button class="btn primary" id="nextBtn" disabled>Kunci jawaban & lanjut →</button></div>
+  <p class="note" style="margin-top:16px">Setelah menekan tombol lanjut, jawaban pada soal ini terkunci dan tidak dapat kembali.</p>
+</section>
+
+<section class="card hidden" id="sending">
+  <h2>Menghitung hasil…</h2><p class="sub">Jawaban sedang dinilai dan dikirim ke Google Sheets. Jangan tutup halaman dulu.</p><div class="notice" id="sendStatus">Mengirim hasil…</div>
+</section>
+
+<section class="card hidden" id="results">
+  <div class="kicker">MISI SELESAI</div><h2 id="resultHeading">Hasil tantangan</h2>
+  <div class="result-score" id="score">0</div><p class="sub" id="scoreCaption"></p>
+  <div class="notice" id="sheetStatus">Hasil ujian diproses.</div>
+  <h2 style="margin-top:26px">Pembahasan jawaban</h2><p class="sub">Pelajari kembali konsep dari setiap soal yang sudah kamu kerjakan.</p>
+  <div id="reviewList"></div>
+</section>
+</main>
+<div class="footer">Misi Data • Latihan Analisis Data dan Spreadsheet</div>
+<script>
+/* Ganti URL di bawah dengan URL Web App Google Apps Script yang berakhiran /exec. */
+const GOOGLE_SCRIPT_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI";
+const DURATION_SECONDS = 40 * 60;
+const QUESTIONS = [
+{topic:"Analisis Data",q:"Sebuah kelas memperoleh nilai kuis 70, 80, 80, 90, dan 100. Kesimpulan yang paling tepat adalah …",options:["Semua siswa mendapat nilai yang sama","Nilai tertinggi adalah 90","Nilai yang paling sering muncul adalah 80","Rata-rata pasti 80"],answer:2,explain:"Nilai 80 muncul dua kali, lebih sering daripada nilai lainnya. Nilai yang paling sering muncul disebut modus."},
+{topic:"Analisis Data",q:"Data penjualan buku selama empat hari adalah 12, 15, 9, dan 20 buku. Berapa jumlah seluruh buku terjual?",options:["46","54","56","60"],answer:2,explain:"Jumlah seluruh penjualan adalah 12 + 15 + 9 + 20 = 56 buku."},
+{topic:"Analisis Data",q:"Mengapa data perlu dibersihkan sebelum dianalisis?",options:["Agar ukuran file selalu bertambah","Untuk menghapus semua data yang berbeda","Agar data salah, ganda, atau tidak konsisten ditangani","Supaya grafik tidak memiliki judul"],answer:2,explain:"Pembersihan data membantu menangani data ganda, kosong, salah ketik, dan format yang tidak konsisten agar analisis lebih dapat dipercaya."},
+{topic:"Analisis Data",q:"Nilai ulangan 60, 70, 80, 90, 100. Berapakah mediannya?",options:["70","75","80","90"],answer:2,explain:"Median adalah nilai tengah setelah data diurutkan. Dari lima nilai tersebut, nilai ketiga adalah 80."},
+{topic:"Analisis Data",q:"Data jumlah pengunjung perpustakaan selama sepekan paling tepat disajikan dalam tabel agar …",options:["Data tersusun rapi dan mudah dibandingkan","Semua angka berubah menjadi persentase","Tidak perlu membaca label","Data otomatis menjadi benar"],answer:0,explain:"Tabel menyusun data dalam baris dan kolom sehingga pembaca lebih mudah menemukan, memeriksa, dan membandingkan nilai."},
+{topic:"Analisis Data",q:"Dalam analisis data, korelasi antara dua hal berarti …",options:["Satu hal pasti menyebabkan hal lain","Keduanya selalu memiliki nilai sama","Ada hubungan pola antara keduanya, tetapi belum tentu sebab-akibat","Datanya pasti salah"],answer:2,explain:"Korelasi menunjukkan hubungan atau pola antara dua variabel, tetapi tidak otomatis membuktikan hubungan sebab-akibat."},
+{topic:"IF",q:"Di sel B2 terdapat nilai 78. Rumus =IF(B2>=75,\"Tuntas\",\"Remedial\") menghasilkan …",options:["Remedial","Tuntas","78","FALSE"],answer:1,explain:"Karena 78 lebih besar atau sama dengan 75, kondisi bernilai benar sehingga IF mengembalikan teks “Tuntas”."},
+{topic:"IF",q:"Rumus yang benar untuk menampilkan “Lulus” jika nilai di C2 minimal 70 dan “Belum” jika kurang dari 70 adalah …",options:["=IF(C2>=70,\"Lulus\",\"Belum\")","=COUNTIF(C2,70)","=IF(\"Lulus\",C2<70)","=SUM(C2>=70)"],answer:0,explain:"Sintaks IF adalah IF(kondisi, nilai_jika_benar, nilai_jika_salah). Kondisi C2>=70 menentukan hasil yang ditampilkan."},
+{topic:"IF",q:"Jika A2 berisi 5, apa hasil =IF(A2>5,\"Besar\",\"Kecil atau sama\")?",options:["Besar","Kecil atau sama","5","Error selalu"],answer:1,explain:"Angka 5 tidak lebih besar dari 5, jadi kondisi salah dan hasilnya “Kecil atau sama”."},
+{topic:"IF",q:"Pada spreadsheet, fungsi IF digunakan untuk …",options:["Menghitung sel berisi angka saja","Menguji kondisi dan memilih hasil berdasarkan benar atau salah","Membuat grafik otomatis","Mengurutkan data berdasarkan abjad"],answer:1,explain:"IF memeriksa suatu kondisi. Jika benar, fungsi menghasilkan nilai pertama; jika salah, menghasilkan nilai alternatif."},
+{topic:"IF",q:"D2 berisi 82. Hasil =IF(D2>=90,\"A\",IF(D2>=75,\"B\",\"C\")) adalah …",options:["A","B","C","82"],answer:1,explain:"Nilai 82 tidak memenuhi D2>=90, lalu memenuhi D2>=75. Karena itu hasilnya B."},
+{topic:"IFS",q:"Nilai di A2 adalah 88. Apa hasil =IFS(A2>=90,\"A\",A2>=80,\"B\",A2>=70,\"C\",TRUE,\"D\")?",options:["A","B","C","D"],answer:1,explain:"IFS memeriksa kondisi secara berurutan. 88 tidak mencapai 90, tetapi memenuhi 80, sehingga hasilnya B."},
+{topic:"IFS",q:"Apa kelebihan IFS dibandingkan IF bertingkat?",options:["Tidak memerlukan kondisi","Lebih ringkas untuk memeriksa beberapa kondisi berurutan","Hanya bisa menghitung angka","Selalu menghasilkan grafik"],answer:1,explain:"IFS dapat memeriksa beberapa kondisi dan mengembalikan hasil dari kondisi pertama yang benar, sehingga lebih ringkas daripada IF bertingkat."},
+{topic:"IFS",q:"Rumus =IFS(B2>=85,\"Baik\",B2>=70,\"Cukup\",TRUE,\"Perlu latihan\") memakai TRUE di akhir untuk …",options:["Mengakhiri rumus tanpa hasil","Menjadi kondisi cadangan jika kondisi sebelumnya tidak terpenuhi","Mengubah teks menjadi angka","Menghitung jumlah data"],answer:1,explain:"TRUE selalu benar. Jika tidak ada kondisi sebelumnya yang benar, bagian TRUE menjadi hasil cadangan."},
+{topic:"IFS",q:"Nilai 68 diuji dengan =IFS(A2>=90,\"Sangat baik\",A2>=75,\"Baik\",A2>=60,\"Cukup\"). Hasilnya …",options:["Sangat baik","Baik","Cukup","FALSE"],answer:2,explain:"68 tidak memenuhi 90 atau 75, tetapi memenuhi 60, sehingga hasilnya “Cukup”."},
+{topic:"COUNT",q:"Sel A1:A5 berisi 12, “dua belas”, kosong, 15, dan 20. Hasil =COUNT(A1:A5) adalah …",options:["2","3","4","5"],answer:1,explain:"COUNT menghitung sel yang berisi angka. Angka 12, 15, dan 20 berjumlah tiga sel; teks dan sel kosong tidak dihitung."},
+{topic:"COUNT",q:"Fungsi COUNT digunakan untuk menghitung …",options:["Semua sel yang berisi teks atau angka","Sel yang berisi angka","Sel kosong saja","Jumlah karakter dalam kalimat"],answer:1,explain:"COUNT menghitung banyaknya sel yang berisi nilai numerik, bukan semua sel yang terisi."},
+{topic:"COUNT",q:"Rentang B2:B7 berisi 5, 7, “izin”, 9, kosong, dan 10. Apa hasil =COUNT(B2:B7)?",options:["3","4","5","6"],answer:1,explain:"Empat sel berisi angka, yaitu 5, 7, 9, dan 10. Teks “izin” dan sel kosong tidak dihitung."},
+{topic:"COUNTIF",q:"Rentang A2:A8 berisi Lulus, Remedial, Lulus, Lulus, Remedial, Lulus, kosong. Hasil =COUNTIF(A2:A8,\"Lulus\") adalah …",options:["2","3","4","5"],answer:2,explain:"COUNTIF menghitung sel yang memenuhi satu kriteria. Kata “Lulus” muncul empat kali."},
+{topic:"COUNTIF",q:"Rumus untuk menghitung berapa nilai pada B2:B30 yang lebih besar dari atau sama dengan 75 adalah …",options:["=COUNT(B2:B30,\">=75\")","=COUNTIF(B2:B30,\">=75\")","=IF(B2:B30,75)","=SUMIF(B2:B30,75)"],answer:1,explain:"COUNTIF menggunakan pola COUNTIF(rentang, kriteria). Kriteria perbandingan ditulis sebagai teks, misalnya \">=75\"."},
+{topic:"COUNTIF",q:"Apa hasil =COUNTIF(C1:C5,\"Hadir\") jika data berisi Hadir, Izin, Hadir, Sakit, Hadir?",options:["1","2","3","5"],answer:2,explain:"Ada tiga sel dengan isi tepat “Hadir”, sehingga hasil COUNTIF adalah 3."},
+{topic:"COUNTIF",q:"Jika D2:D20 berisi nama kelas, rumus untuk menghitung jumlah siswa dari kelas IX A adalah …",options:["=COUNT(D2:D20)","=COUNTIF(D2:D20,\"IX A\")","=IFS(D2:D20=\"IX A\")","=IF(D2:D20,\"IX A\")"],answer:1,explain:"COUNTIF menghitung sel dalam rentang D2:D20 yang cocok dengan kriteria teks “IX A”."},
+{topic:"Grafik Batang",q:"Grafik batang paling tepat digunakan untuk …",options:["Membandingkan jumlah siswa pada beberapa kelas","Menunjukkan perubahan suhu setiap menit secara berkelanjutan saja","Menunjukkan hubungan dua variabel numerik","Menampilkan bagian dari keseluruhan tanpa kategori"],answer:0,explain:"Grafik batang cocok untuk membandingkan nilai antar kategori, misalnya jumlah siswa per kelas atau jumlah buku per jenis."},
+{topic:"Grafik Garis",q:"Grafik garis paling tepat untuk menunjukkan …",options:["Komposisi pengeluaran satu bulan","Perubahan suhu dari pagi hingga sore","Perbandingan jumlah siswa antarkelas saja","Hubungan tinggi dan berat sejumlah siswa tanpa urutan"],answer:1,explain:"Grafik garis efektif menunjukkan tren atau perubahan data berurutan, terutama berdasarkan waktu."},
+{topic:"Grafik Lingkaran",q:"Grafik lingkaran paling sesuai untuk menunjukkan …",options:["Perubahan nilai dari hari ke hari","Hubungan tinggi badan dan berat badan","Persentase pilihan ekstrakurikuler dari seluruh siswa","Urutan proses algoritma"],answer:2,explain:"Grafik lingkaran memperlihatkan proporsi setiap kategori terhadap total. Kategori sebaiknya merupakan bagian dari satu keseluruhan."},
+{topic:"Grafik Pencar",q:"Grafik pencar (scatter plot) paling tepat digunakan untuk …",options:["Membandingkan nama siswa berdasarkan abjad","Melihat hubungan antara waktu belajar dan nilai ujian","Menunjukkan persentase satu kelas","Menampilkan satu nilai total saja"],answer:1,explain:"Grafik pencar menampilkan pasangan nilai dua variabel numerik sehingga pola hubungan, pengelompokan, atau pencilan dapat terlihat."},
+{topic:"Grafik Batang",q:"Data jumlah buku yang dipinjam: fiksi 25, sains 18, sejarah 12. Jenis grafik yang paling mudah untuk membandingkan ketiga kategori adalah …",options:["Grafik batang","Grafik garis","Grafik pencar","Peta"],answer:0,explain:"Kategori buku berbeda dibandingkan berdasarkan jumlah. Grafik batang membuat perbedaan besar-kecil antar kategori mudah dilihat."},
+{topic:"Grafik Garis",q:"Grafik garis penjualan harian naik dari Senin sampai Rabu lalu turun pada Kamis. Kesimpulan yang tepat adalah …",options:["Penjualan selalu turun","Penjualan meningkat hingga Rabu lalu menurun pada Kamis","Kamis pasti paling tinggi","Grafik membuktikan penyebab perubahan"],answer:1,explain:"Baca tren sesuai titik data: naik sampai Rabu lalu turun pada Kamis. Grafik sendiri tidak menjelaskan penyebab perubahan."},
+{topic:"Grafik Lingkaran",q:"Dari 40 siswa, 10 memilih basket. Berapa persentase siswa yang memilih basket?",options:["10%","20%","25%","40%"],answer:2,explain:"Persentase = 10 ÷ 40 × 100% = 25%. Grafik lingkaran dapat menggambarkan bagian ini dari keseluruhan."},
+{topic:"Grafik Pencar",q:"Pada grafik pencar, titik-titik cenderung naik dari kiri ke kanan. Hal ini biasanya menunjukkan …",options:["Hubungan positif","Hubungan negatif","Tidak ada variasi","Semua nilai identik"],answer:0,explain:"Pola naik dari kiri ke kanan menunjukkan hubungan positif: nilai satu variabel cenderung meningkat ketika variabel lain meningkat. Ini bukan bukti sebab-akibat."},
+{topic:"Pemilihan Grafik",q:"Seorang guru ingin melihat hubungan antara lama belajar dan nilai ujian siswa. Grafik yang paling sesuai adalah …",options:["Lingkaran","Batang","Pencar","Garis waktu kelas"],answer:2,explain:"Lama belajar dan nilai ujian adalah dua variabel numerik. Grafik pencar membantu melihat pola hubungan di antara keduanya."}
+];
+// Fix an intentionally checked arithmetic item without changing the structure of the quiz bank.
+QUESTIONS[1].answer = 2;
+QUESTIONS[1].explain = "Jumlah seluruh penjualan adalah 12 + 15 + 9 + 20 = 56 buku.";
+const $ = id => document.getElementById(id);
+let participant=null, order=[], current=0, selected=null, answers=[], startedAt=null, deadline=null, timerInterval=null, violations=0, finished=false, endReason="Selesai";
+const attemptKey = () => "misiDataAttempt:" + [participant.name.toLowerCase(),participant.no,participant.klass].join("|");
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function show(id){["identity","quiz","sending","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo({top:0,behavior:"smooth"});}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("startBtn").addEventListener("click",()=>{
+ const name=$("studentName").value.trim(), no=$("studentNo").value.trim(), klass=$("studentClass").value;
+ if(!name||!no||!klass){alert("Lengkapi nama, nomor absen, dan kelas terlebih dahulu.");return;}
+ if(+no<1||+no>60){alert("Nomor absen harus antara 1 dan 60.");return;}
+ participant={name,no,klass};
+ if(localStorage.getItem(attemptKey())){alert("Identitas ini sudah digunakan untuk mengerjakan di perangkat ini. Hubungi guru jika terjadi kendala.");return;}
+ if(!confirm("Mulai ujian sekarang? Waktu 40 menit langsung berjalan dan jawaban tidak bisa dibuka kembali."))return;
+ order=shuffle(QUESTIONS.map((_,i)=>i)); answers=Array(QUESTIONS.length).fill(null);current=0;selected=null;violations=0;finished=false;startedAt=Date.now();deadline=startedAt+DURATION_SECONDS*1000;
+ localStorage.setItem(attemptKey(),JSON.stringify({startedAt,deadline,started:true}));
+ show("quiz");renderQuestion();timerInterval=setInterval(tick,250);tick();
+});
+function renderQuestion(){
+ const q=QUESTIONS[order[current]];selected=null;
+ $("questionCount").textContent=`SOAL ${current+1} DARI ${order.length}`;
+ $("progress").style.width=`${(current/order.length)*100}%`;
+ $("topicLabel").textContent=q.topic;
+ $("questionText").textContent=q.q;
+ const optionOrder=shuffle(q.options.map((text,i)=>({text,original:i})));
+ $("options").innerHTML="";
+ optionOrder.forEach((o,i)=>{const label=document.createElement("label");label.className="option";label.innerHTML=`<input type="radio" name="answer" value="${o.original}"><span><b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(o.text)}</span>`;label.querySelector("input").addEventListener("change",()=>{selected=o.original;$("nextBtn").disabled=false;$("answeredLabel").textContent="Jawaban dipilih — tekan lanjut untuk mengunci";});$("options").appendChild(label);});
+ $("nextBtn").textContent=current===order.length-1?"Kunci jawaban & selesaikan ✓":"Kunci jawaban & lanjut →";
+ $("nextBtn").disabled=true;$("answeredLabel").textContent="Pilih satu jawaban";
+}
+$("nextBtn").addEventListener("click",()=>{
+ if(selected===null)return;
+ answers[current]={questionIndex:order[current],answer:selected};
+ if(current===order.length-1){endReason="Selesai";finishQuiz();return;}
+ current++;renderQuestion();
+});
+function tick(){
+ if(finished)return;
+ const remain=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+ const m=String(Math.floor(remain/60)).padStart(2,"0"),s=String(remain%60).padStart(2,"0");
+ $("timer").textContent=`${m}:${s}`;$("timer").classList.toggle("danger",remain<=300);
+ if(remain<=0){endReason="Waktu habis";finishQuiz();}
+}
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="hidden" && participant && !finished && !$("quiz").classList.contains("hidden")){
+   violations++;setTimeout(()=>{if(!finished&&document.visibilityState==="visible")alert("Peringatan: perpindahan tab/aplikasi tercatat. Tetap berada di halaman ujian.");},150);
+ }
+});
+window.addEventListener("blur",()=>{ /* Tab/app switching cannot be fully blocked by a normal website. */ });
+function finishQuiz(){
+ if(finished)return;finished=true;clearInterval(timerInterval);$("progress").style.width="100%";show("sending");
+ const elapsed=Math.min(DURATION_SECONDS,Math.max(0,Math.round((Date.now()-startedAt)/1000)));
+ let correct=0;const detail=[];
+ for(let i=0;i<order.length;i++){
+  const qi=order[i],q=QUESTIONS[qi],a=answers[i]?.answer??null,isCorrect=a===q.answer;
+  if(isCorrect)correct++;
+  detail.push({number:i+1,topic:q.topic,question:q.q,options:q.options,studentAnswer:a===null?"Tidak dijawab":q.options[a],correctAnswer:q.options[q.answer],isCorrect,explanation:q.explain});
+ }
+ const score=Math.round(correct/order.length*100);
+ const payload={name:participant.name,attendance:Number(participant.no),className:participant.klass,score,correct,total:order.length,elapsedSeconds:elapsed,violations,endReason,submittedAt:new Date().toISOString(),answers:detail};
+ localStorage.setItem(attemptKey(),JSON.stringify({finished:true,score,submittedAt:payload.submittedAt}));
+ renderResults(payload);
+ sendResults(payload);
+}
+function renderResults(payload){
+ $("resultHeading").textContent=`Selesai, ${participant.name}!`;
+ $("score").textContent=payload.score;
+ $("scoreCaption").textContent=`${payload.correct} dari ${payload.total} jawaban benar • Waktu ${Math.floor(payload.elapsedSeconds/60)} menit ${payload.elapsedSeconds%60} detik • Peringatan perpindahan tab/aplikasi: ${payload.violations}`;
+ $("reviewList").innerHTML=payload.answers.map(a=>`<article class="review ${a.isCorrect?"correct":"wrong"}"><h3>Soal ${a.number} • ${escapeHtml(a.topic)} <span class="status">${a.isCorrect?"✓ Benar":"✗ Perlu dipelajari"}</span></h3><p><b>${escapeHtml(a.question)}</b></p><p>Jawabanmu: ${escapeHtml(a.studentAnswer)}</p><p>Jawaban benar: <b>${escapeHtml(a.correctAnswer)}</b></p><p>${escapeHtml(a.explanation)}</p></article>`).join("");
+ show("results");
+}
+async function sendResults(payload){
+ const status=$("sheetStatus");
+ if(!GOOGLE_SCRIPT_URL.startsWith("https://script.google.com/")){
+  status.className="notice warning";status.textContent="URL Google Apps Script belum diatur. Nilai sudah tampil, tetapi belum dikirim ke Google Sheets. Masukkan URL /exec di index.html lalu deploy ulang.";
+  return;
+ }
+ try{
+  await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  status.textContent="Permintaan pengiriman hasil sudah dikirim. Periksa Google Sheets untuk memastikan baris nilai masuk.";
+ }catch(e){
+  status.className="notice warning";status.textContent="Pengiriman gagal karena koneksi atau konfigurasi. Hubungi guru dan jangan mengulang ujian; catat tangkapan layar hasil.";
+ }
+}
+</script>
+</body>
+</html>
