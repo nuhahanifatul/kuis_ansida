@@ -7,8 +7,8 @@
  *    Who has access: Anyone
  * 4) Salin URL /exec ke index.html pada Netlify.
  */
-const SPREADSHEET_ID = "PASTE_SPREADSHEET_ID_DI_SINI";
-const SHEET_NAME = "Nilai";
+const SPREADSHEET_ID = "1gaLb6a4Zu_NB8Xa5GKgHlvdUQ4WQpRES1pVdgX0ltMY";
+const SHEET_NAME = "kuis_ansidata";
 
 function doPost(e) {
   try {
